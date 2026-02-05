@@ -19,6 +19,27 @@ npm install
 npm run dev
 ```
 
+## Code Quality
+
+Run these checks after implementing code, before committing:
+
+```bash
+npm run lint      # Style/syntax issues
+npm run build     # TypeScript + bundle errors
+```
+
+If the project has tests:
+```bash
+npm test          # Unit/integration tests
+```
+
+**When to run:**
+- After completing a feature or fix (before commit)
+- After resolving merge conflicts
+- Before pushing to remote
+
+**Skip for:** Documentation-only changes, config tweaks
+
 ## Issue-Based Development
 
 GitHub Issues are the source of truth for all technical work. Use Notion for business/marketing tasks.
