@@ -38,18 +38,60 @@ Create scratchpad at `docs/scratchpads/issue-$ARGUMENTS-{slug}.md` and save rese
 - Commit after each meaningful change
 - Keep commits focused and atomic
 
-## TEST
+## TEST (Mandatory)
 
-- Run the project's test suite
-- Test UI changes visually (use browser/screenshot tools)
-- Fix any failures before proceeding
-- All tests must pass before moving on
+**You MUST run these checks before DEPLOY. Do not skip.**
+
+### 1. Write Unit Tests
+
+Every new source file MUST have a corresponding test file. Follow existing project patterns:
+
+- Check existing test files for mock strategies and conventions
+- Test the happy path, edge cases, and error states
+- Place test files adjacent to source (e.g., `__tests__/` folders) following the project's convention
+
+### 2. Run Verification
+
+```bash
+# Minimum verification (always run)
+npm run lint && npm run build && npm test
+```
+
+- All existing tests must still pass (no regressions)
+- All new tests must pass
+- If any check fails, fix and re-run
+
+### 3. Visual Check (if UI changes)
+
+- Test visually with browser tools or screenshots
+
+Do not proceed to DEPLOY with failing tests or lint errors.
 
 ## DEPLOY
 
 - Final commit with message: `"Description (closes #$ARGUMENTS)"`
 - Push to main
-- Append completion summary to scratchpad: what was done, any gotchas for future reference
+
+## SYNC
+
+Update the implementation plan to reflect completed work.
+
+1. **Find the plan.** Look for `docs/implementation-plan.md`. If missing, check for any `*plan*.md` or `*roadmap*.md` in `docs/` (exclude scratchpads). If no plan file exists, note it and skip to step 4.
+
+2. **Find the checkbox.** In the plan file, search for:
+   - A checkbox line containing `#$ARGUMENTS` (exact issue number) — preferred match
+   - Fallback: a `- [ ]` line whose text closely matches the issue title
+   - Look within verification checklists under phase headings
+
+3. **Update it.** If matched:
+   - Flip `- [ ]` to `- [x]`
+   - Append: ` *(Mon DD)*`
+   - Commit: `"Update plan: mark #$ARGUMENTS complete"`
+
+4. **Report.** Append to scratchpad completion summary (what was done, plan sync result, any gotchas):
+   - "Plan synced: [checkbox text] in [Phase N] checked off"
+   - OR "No matching checkbox found in [plan file] for #$ARGUMENTS"
+   - OR "No implementation plan found in docs/"
 
 ## If Blocked
 

@@ -103,5 +103,13 @@ Use `/issue <number>` to work on a GitHub issue. This command follows a 4-phase 
 - Plans are named `issue-{number}-{slug}.md`
 - Include implementation steps and link to the issue
 
+## Debugging Native Library Bugs
+
+For bugs in third-party native modules (React Native, Expo plugins, etc.), read the actual native source file (`.m`, `.swift`, `.java`, `.kt`) inside `node_modules` before hypothesizing. Library docs won't reveal implementation omissions — the source will.
+
+## Unverified Bug Fixes
+
+When documenting a fix that hasn't been tested, use hypothesis language: "Suspected: X. Hypothesis: Y. Verification required before closing." Never write "the fix is X" for anything unverified — it creates false confidence that propagates to the next session.
+
 ## Project Structure
 [Fill in as the project evolves]

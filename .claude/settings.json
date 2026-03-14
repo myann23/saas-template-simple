@@ -1,6 +1,6 @@
 {
   "statusLine": {
     "type": "command",
-    "command": "powershell -File C:/Users/myann/.claude/statusline.ps1"
+    "command": "powershell -File .claude/statusline.ps1"
   }
 }
