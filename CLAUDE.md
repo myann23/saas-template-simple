@@ -11,34 +11,79 @@ This file provides guidance to Claude Code when working with this project.
 **Framework recommendation:** Use Next.js (App Router) for any web app with public-facing pages. Next.js provides SSR/SSG out of the box, making SEO trivial from day one. Avoids painful migrations later. Only use Vite for internal tools where SEO doesn't matter.
 
 ## Development
-[Fill in: How to run the project locally]
 
-```bash
-# Example
-npm install
-npm run dev
-```
+Document any non-default commands here (e.g., `pnpm` instead of `npm`, custom scripts, non-standard ports). Skip commands Claude already knows.
 
 ## Code Quality
 
-Run these checks after implementing code, before committing:
+**Before commit:** run lint and build. If tests exist, run them. Run again after resolving merge conflicts and before pushing to remote.
 
-```bash
-npm run lint      # Style/syntax issues
-npm run build     # TypeScript + bundle errors
-```
+**Skip for:** documentation-only changes, config tweaks.
 
-If the project has tests:
-```bash
-npm test          # Unit/integration tests
-```
+## Agent Behavior
 
-**When to run:**
-- After completing a feature or fix (before commit)
-- After resolving merge conflicts
-- Before pushing to remote
+### Think Before Coding
 
-**Skip for:** Documentation-only changes, config tweaks
+Don't assume. Don't hide confusion. Surface tradeoffs.
+
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them — don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+### Simplicity First
+
+Minimum code that solves the problem. Nothing speculative.
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+### Surgical Changes
+
+Touch only what you must. Clean up only your own mess.
+
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it — don't delete it.
+
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+Every changed line should trace directly to the user's request.
+
+### Delegation Decision: Codex vs. Claude Code
+
+Before handing long-running work to Codex (via `/codex:rescue`, `ask-codex`, or autonomous agent runs), check that the spec defines:
+
+- **Testable acceptance criteria** — what done looks like, verifiable
+- **Out of scope** — what NOT to touch
+- **Files affected** — at least the entry points
+- **Verification command** — how to confirm done (test, build, manual check)
+
+If any of those are missing, the spec is not yet delegateable. Iterate in Claude Code first — its dialogue is the mechanism for sharpening intent. Only hand to Codex once the spec can stand on its own.
+
+Rule of thumb: **Codex executes specs faithfully. Claude Code helps you write them.** Don't delegate intent that's still evolving.
+
+### Destructive Commands
+
+Never run irreversible commands without explicit confirmation:
+- `git push --force` / `--force-with-lease`
+- `git reset --hard`, `git branch -D`, branch merges into main
+- `rm -rf`, dropping database tables, killing PIDs
+- Any package uninstall on shared/production environments
+
+If unsure whether a command is destructive, ask. The cost of pausing is low; the cost of an unwanted action is high.
+
+---
 
 ## Issue-Based Development
 
@@ -58,7 +103,7 @@ GitHub Issues are the source of truth for all technical work. Use Notion for bus
 
 ### Issue Templates
 
-Always use the templates in `.github/ISSUE_TEMPLATE/` when creating issues:
+Use templates in `.github/ISSUE_TEMPLATE/` when creating issues:
 
 | Template | Use For | Auto-Label |
 |----------|---------|------------|
@@ -66,26 +111,7 @@ Always use the templates in `.github/ISSUE_TEMPLATE/` when creating issues:
 | `bug.md` | Something broken | `bug` |
 | `improvement.md` | Enhance existing | `improvement` |
 
-**Creating issues via CLI:**
-```bash
-# Use the template structure in the body
-gh issue create --title "Add user auth" --label feature --label auth --body "$(cat <<'EOF'
-## Summary
-Add user authentication with email/password.
-
-## User Story
-As a user, I want to log in so that my data is saved.
-
-## Acceptance Criteria
-- [ ] Sign up form
-- [ ] Login form
-- [ ] Session persistence
-
-## Technical Notes
-Use Supabase Auth or NextAuth.js
-EOF
-)"
-```
+Pass `--label feature|bug|improvement` plus any category labels (`auth`, `ui`, etc.). Read the template files for body structure.
 
 ### Milestones
 MVP → v2 → Backlog
@@ -107,7 +133,9 @@ Use `/issue <number>` to work on a GitHub issue. This command follows a 4-phase 
 
 For bugs in third-party native modules (React Native, Expo plugins, etc.), read the actual native source file (`.m`, `.swift`, `.java`, `.kt`) inside `node_modules` before hypothesizing. Library docs won't reveal implementation omissions — the source will.
 
-## Unverified Bug Fixes
+## Verification Before Reporting Done
+
+Before reporting a task complete, verify the feature **functions correctly**, not just that the code exists. Run the relevant tests, build, and lint. Exercise the path manually if it's UI. Only then claim done.
 
 When documenting a fix that hasn't been tested, use hypothesis language: "Suspected: X. Hypothesis: Y. Verification required before closing." Never write "the fix is X" for anything unverified — it creates false confidence that propagates to the next session.
 
