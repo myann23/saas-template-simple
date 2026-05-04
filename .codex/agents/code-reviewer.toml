@@ -1,0 +1,6 @@
+name = "code-reviewer"
+description = "Code review specialist for quality, security, maintainability, and regression risk."
+canonical_prompt = "docs/agents/code-reviewer.md"
+
+[usage]
+trigger = "Use after code changes or when reviewing a diff, pull request, or working tree."

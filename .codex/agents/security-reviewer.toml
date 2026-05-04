@@ -1,0 +1,6 @@
+name = "security-reviewer"
+description = "Security reviewer for user input, auth, API, sensitive data, payment, dependency, and server-side changes."
+canonical_prompt = "docs/agents/security-reviewer.md"
+
+[usage]
+trigger = "Use when code handles user input, auth, API endpoints, sensitive data, dependencies, files, or payments."

@@ -1,0 +1,6 @@
+name = "planner"
+description = "Planning specialist for complex features, architectural changes, and refactors."
+canonical_prompt = "docs/agents/planner.md"
+
+[usage]
+trigger = "Use when planning is requested or implementation is complex, architectural, or ambiguous."
