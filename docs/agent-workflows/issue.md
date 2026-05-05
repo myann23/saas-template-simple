@@ -23,13 +23,19 @@ Determine complexity:
 
 ## 2. Research
 
-For complex issues, inspect likely files, existing patterns, related tests, and dependencies. Create:
+For complex issues:
 
-```text
-docs/scratchpads/issue-<number>-<slug>.md
-```
+1. Read the GH issue's labels.
+2. Consult `AGENTS.md` → "Required Reading (by issue label)" table for the docs that match those labels. Always include the always-on docs (CLAUDE.md, AGENTS.md, issue body, matching impl plan entry).
+3. **Delegate the reads to a research subagent** to keep the main session context lean. In Claude Code, use the `Explore` agent type. In Codex CLI, spawn a research helper or use a planner persona. Subagent prompt template:
 
-Save concise research findings there. For simple issues, create the scratchpad during planning if useful.
+   > "Read these docs: [paths from Required Reading]. Then map the files likely affected by GH issue #<N> in this repo. Return a tight digest under 500 words covering: (1) file paths likely to change, (2) existing patterns to reuse, (3) dependencies on other issues, (4) prior art in `docs/scratchpads/`, (5) gotchas. Cite specific files/lines for non-obvious points."
+
+4. Save the subagent's digest to `docs/scratchpads/issue-<number>-<slug>.md` as the **Research** section.
+
+For simple issues (one-file fixes, typos), the main agent can do the reads inline without a subagent — but always reference `AGENTS.md` Required Reading first to avoid missing project-specific context.
+
+If `AGENTS.md` has no Required Reading section, fall back to inspecting likely files based on the issue body's "Files Likely Affected" field.
 
 ## 3. Plan
 

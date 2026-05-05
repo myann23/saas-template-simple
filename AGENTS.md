@@ -26,6 +26,24 @@ Extract `<project-name>` from the user request and follow the canonical workflow
 
 For requests that do not match the triggers above, use normal engineering workflow and project conventions.
 
+## Required Reading (by issue label) — project-specific, fill in per project
+
+When `/issue <N>` runs, step 2 (Research) reads the GH issue's labels and consults this table to load the right project context. The workflow delegates the reads to a research subagent (e.g., Claude Code's `Explore` agent type, or Codex CLI's planner persona) so the main session's context stays lean. The subagent returns a tight digest that gets saved to the scratchpad.
+
+Each project should populate this table before any `/issue` runs. Map each label your project uses to the docs that should be read for that issue type.
+
+| Label | Docs to load |
+|---|---|
+| `ui` | (replace) brand system doc, customer voice doc, design references |
+| `api`, `infra` | (replace) architecture / spec doc |
+| `content` | (replace) content strategy, customer language source |
+| `seo`, `analytics` | (replace) spec sections relevant to those concerns |
+| `docs`, `polish`, `setup`, `improvement` | (typically no extra reads — CLAUDE.md + issue body sufficient) |
+
+**Always-on (read regardless of label):** `CLAUDE.md`, `AGENTS.md`, the GH issue body, the implementation plan entry matching the issue (path declared in Plan Locations below).
+
+If this section is missing or empty, the `/issue` workflow falls back to inspecting files named in the issue body's "Files Likely Affected" field.
+
 ## Plan Locations (project-specific — fill in per project)
 
 When syncing checkboxes after `/issue` (step 7 of `docs/agent-workflows/issue.md`), declared paths take precedence over path globs. Paths are relative to this repo's root.
