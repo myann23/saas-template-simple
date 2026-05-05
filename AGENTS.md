@@ -26,6 +26,38 @@ Extract `<project-name>` from the user request and follow the canonical workflow
 
 For requests that do not match the triggers above, use normal engineering workflow and project conventions.
 
+## Branch Strategy — project-specific, fill in per project
+
+Choose one. Solo / pre-launch projects often prefer direct-to-main for speed; teams or post-launch projects benefit from PR gating.
+
+**Pattern A — Direct to default branch (no PR):**
+
+```markdown
+## Branch Strategy
+
+**Direct to <main|master>. Skip PRs.**
+
+Solo dev, pre-launch — PRs add ceremony without payoff until production traffic exists. Each issue's final commit closes its GH issue via `closes #<N>` in the message.
+
+Switch to PR workflow after [milestone — e.g., domain attach issue #N] when default branch = production. Until then, broken default is just a quick follow-up commit.
+
+Exception: changes touching DNS, secrets, or the deploy pipeline open a PR so preview can be eyeballed before merge.
+```
+
+**Pattern B — PR workflow (default if no Branch Strategy declared):**
+
+```markdown
+## Branch Strategy
+
+**Branch + PR for every issue.**
+
+Each issue gets its own feature branch (`issue-<N>-<slug>`). Commit, push branch, open PR, wait for CI green, then merge. Use `closes #<N>` in commit or PR description to auto-close the issue on merge.
+
+CI must pass before merge. Vercel preview URL on each PR enables eyeball verification before production.
+```
+
+If this section is missing, the `/issue` workflow defaults to Pattern B (PR workflow) as the safer choice for unknown projects.
+
 ## Required Reading (by issue label) — project-specific, fill in per project
 
 When `/issue <N>` runs, step 2 (Research) reads the GH issue's labels and consults this table to load the right project context. The workflow delegates the reads to a research subagent (e.g., Claude Code's `Explore` agent type, or Codex CLI's planner persona) so the main session's context stays lean. The subagent returns a tight digest that gets saved to the scratchpad.

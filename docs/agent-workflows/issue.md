@@ -80,7 +80,12 @@ Final commit message must include:
 closes #<number>
 ```
 
-Prefer branch and PR workflow unless the repository explicitly instructs direct pushes to `main` and the user has not objected.
+**Branch strategy: read `AGENTS.md` "Branch Strategy" section first.**
+
+- If AGENTS.md declares direct-to-main (or direct-to-master): commit on the default branch and push. No PR. The `closes #<N>` in the commit auto-closes the GH issue. Honor any per-issue exceptions listed in AGENTS.md (e.g., DNS / secrets / deploy-pipeline issues may still require PRs).
+- If AGENTS.md is silent OR declares PR-based workflow: open a feature branch, commit, push branch, open PR, wait for CI, merge.
+
+Default if AGENTS.md has no Branch Strategy section: PR workflow (safer default for unknown projects).
 
 ## 7. Sync
 
