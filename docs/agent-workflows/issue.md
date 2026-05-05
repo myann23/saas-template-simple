@@ -27,11 +27,13 @@ For complex issues:
 
 1. Read the GH issue's labels.
 2. Consult `AGENTS.md` → "Required Reading (by issue label)" table for the docs that match those labels. Always include the always-on docs (CLAUDE.md, AGENTS.md, issue body, matching impl plan entry).
-3. **Delegate the reads to a research subagent** to keep the main session context lean. In Claude Code, use the `Explore` agent type. In Codex CLI, spawn a research helper or use a planner persona. Subagent prompt template:
+3. Decide whether to delegate or read inline:
+   - **If the Required Reading docs are already in this session's context** (e.g., this is the 3rd `/issue` of a continuous session and the spec was read for the 1st), skip the subagent. Write the Research digest inline using existing context. No redundant re-reads.
+   - **If they're NOT in context** (post-/clear, new session, or specific docs not yet touched), delegate the reads to a research subagent to keep main context lean. In Claude Code use the `Explore` agent type; in Codex CLI use a planner persona or ad-hoc subagent. Subagent prompt template:
 
-   > "Read these docs: [paths from Required Reading]. Then map the files likely affected by GH issue #<N> in this repo. Return a tight digest under 500 words covering: (1) file paths likely to change, (2) existing patterns to reuse, (3) dependencies on other issues, (4) prior art in `docs/scratchpads/`, (5) gotchas. Cite specific files/lines for non-obvious points."
+     > "Read these docs: [paths from Required Reading]. Then map the files likely affected by GH issue #<N> in this repo. Return a tight digest under 500 words covering: (1) file paths likely to change, (2) existing patterns to reuse, (3) dependencies on other issues, (4) prior art in `docs/scratchpads/`, (5) gotchas. Cite specific files/lines for non-obvious points."
 
-4. Save the subagent's digest to `docs/scratchpads/issue-<number>-<slug>.md` as the **Research** section.
+4. Save the digest to `docs/scratchpads/issue-<number>-<slug>.md` as the **Research** section.
 
 For simple issues (one-file fixes, typos), the main agent can do the reads inline without a subagent — but always reference `AGENTS.md` Required Reading first to avoid missing project-specific context.
 
