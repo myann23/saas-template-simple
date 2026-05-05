@@ -76,13 +76,16 @@ Prefer branch and PR workflow unless the repository explicitly instructs direct 
 
 ## 7. Sync
 
-Find the implementation plan:
+Find the implementation plan in this order:
 
-1. `docs/implementation-plan.md`
-2. Any `*plan*.md` or `*roadmap*.md` in `docs/`
-3. Skip `docs/scratchpads/`
+1. **`AGENTS.md` "Plan Locations" section** — read declared paths (preferred, project-specific). Sync only entries marked ✅.
+2. `docs/implementation-plan.md` (fallback if AGENTS.md has no Plan Locations section).
+3. Any `*plan*.md` or `*roadmap*.md` in `docs/` (fallback).
+4. Skip `docs/scratchpads/`.
 
-Match by `#<number>` first, then by similarity to the issue title. If matched, flip `- [ ]` to `- [x]`, append the completion date, and commit the plan update if commits are in scope.
+Plans declared in AGENTS.md may live outside the repo (e.g., `../../LifeOS/...`) — resolve relative paths from this repo's root.
+
+Match by `#<number>` (use the GH number, or the plan-internal number if documented in AGENTS.md), then by similarity to the issue title. If matched, flip `- [ ]` to `- [x]`, append the completion date, and commit the plan update if commits are in scope. If the plan lives outside this repo, commit there separately.
 
 Append a completion summary to the scratchpad:
 

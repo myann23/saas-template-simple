@@ -26,6 +26,22 @@ Extract `<project-name>` from the user request and follow the canonical workflow
 
 For requests that do not match the triggers above, use normal engineering workflow and project conventions.
 
+## Plan Locations (project-specific — fill in per project)
+
+When syncing checkboxes after `/issue` (step 7 of `docs/agent-workflows/issue.md`), declared paths take precedence over path globs. Paths are relative to this repo's root.
+
+Each project should populate this section before any `/issue` runs. Plans may live outside this repo — e.g., a sibling `LifeOS/` for orchestration-heavy workflows.
+
+| Role | Path | Sync? |
+|---|---|---|
+| Implementation plan (Issue Index + per-issue bodies) | `docs/implementation-plan.md` (replace with actual path) | ✅ Flip checkboxes here |
+| Spec / build plan | `docs/build-plan.md` (replace with actual path) | ❌ Read-only |
+| Roadmap (timeline) | `docs/roadmap.md` (replace with actual path) | ❌ Read-only |
+
+Adding a new plan? Append a row. Renaming/moving an existing plan? Update the path. The `/issue` workflow reads this section first; falls back to `docs/` glob only if Plan Locations is missing or empty.
+
+If the implementation plan lives outside this repo (e.g., `../../LifeOS/...`), the `/issue` workflow commits the checkbox sync in that repo separately, not in this one.
+
 ## Always-On Security Rules
 
 - Before commits, check for hardcoded secrets, missing input validation, SQL injection risk, XSS risk, CSRF gaps, auth/authz gaps, missing endpoint rate limits, and sensitive error messages.
