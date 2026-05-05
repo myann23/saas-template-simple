@@ -26,6 +26,28 @@ Extract `<project-name>` from the user request and follow the canonical workflow
 
 For requests that do not match the triggers above, use normal engineering workflow and project conventions.
 
+## Verification Command — project-specific, fill in per project
+
+**Every `/issue` MUST run this exact command before commit. It MUST match CI exactly.**
+
+Each project should populate this section before any `/issue` runs. The command should mirror what CI executes — type-check + build + linter/formatter, all of them. Do NOT omit the linter step from local verification; mismatch between local and CI is a recurring source of post-merge failures.
+
+**Example for an Astro + Biome project:**
+
+```bash
+cd web && pnpm check && pnpm astro check && pnpm build
+```
+
+**Example for a Node + ESLint project:**
+
+```bash
+npm run lint && npm run typecheck && npm run build && npm test
+```
+
+**Auto-fix before final commit:** if the formatter reports issues, run the auto-fix command (`biome check --write`, `prettier --write`, etc.), then re-run the verification chain. Never push with verification failures.
+
+If this section is missing, the `/issue` workflow falls back to `npm run lint && npm run build && npm test`.
+
 ## Branch Strategy — project-specific, fill in per project
 
 Choose one. Solo / pre-launch projects often prefer direct-to-main for speed; teams or post-launch projects benefit from PR gating.

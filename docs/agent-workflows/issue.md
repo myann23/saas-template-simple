@@ -60,7 +60,9 @@ Do not broaden scope beyond the issue. If the issue lacks testable acceptance cr
 
 ## 5. Test
 
-Before deploy or final completion, run the project verification command. Default:
+Before deploy or final completion, run the **project verification command** declared in `AGENTS.md` → "Verification Command" section. This must match CI exactly — no shortcuts.
+
+If `AGENTS.md` declares no verification command, fall back to the default:
 
 ```powershell
 npm run lint
@@ -68,7 +70,11 @@ npm run build
 npm test
 ```
 
-If the repository has no `package.json` or the command does not exist, stop before deploy and report the blocker. If UI changed, perform visual verification.
+**Critical:** the verification chain MUST include the linter / formatter step (e.g., Biome, ESLint+Prettier) — not just type-check + build. Mismatch between local verification and CI is a recurring source of post-merge failures.
+
+If the formatter reports issues, auto-fix where supported (`biome check --write`, `prettier --write`), then re-run the full verification chain. Never push with verification failures.
+
+If the repository has no `package.json` or the command does not exist, stop before deploy and report the blocker. If UI changed, perform visual verification in the browser.
 
 ## 6. Deploy
 
